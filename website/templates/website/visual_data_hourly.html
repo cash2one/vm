@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}分日数据查询{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block menu %}
+<li>
+  查询数据
+  <ul>
+      <li id="query_data_daily" href="/query_data_daily">分日数据</li>
+      <li id="query_data_hourly" href="/query_data_hourly">分时数据</li>
+  </ul>
+</li>
+<li class="k-state-active">
+  数据视图
+  <ul>
+      <li id="visual_data_daily" href="/visual_data_daily">分日曲线</li>
+      <li id="visual_data_hourly" href="/visual_data_hourly" class="k-item k-state-default k-last" role="menuitem" aria-selected="true"><span class="k-link k-state-selected">分时曲线</span></li>
+  </ul>
+</li>
+<li>
+  节点信息
+  <ul>
+      <li id="node_all" href="/node_all">节点全景</li>
+      <li id="node_manage" href="/node_manage">节点管理</li>
+  </ul>
+</li>
+{% endblock %}
+
+{% block main %}
+{% endblock %}
