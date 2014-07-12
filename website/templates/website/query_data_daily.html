@@ -6,6 +6,8 @@
 {% endblock %}
 
 {% block javascript %}
+<script src="/static/public/js/jquery-ui/datepicker-zh-TW.js"></script>
+<script src="/static/website/js/query_data_daily.js"></script>
 {% endblock %}
 
 {% block menu %}
@@ -33,5 +35,55 @@
 {% endblock %}
 
 {% block main %}
+<div class="panel panel-primary">
+  <div class="panel-heading">查询设置</div>
+  <div class="panel-body">
+    <form class="form-horizontal" role="form">
+      <div class="row">
+        <div class="form-group">
+          <label for="start_date" class="col-md-2 control-label">起始日期</label>
+          <div class="col-md-2">
+            <input type="text" id="start_date" class="date_picker form-control">
+          </div>
+          <label for="end_date" class="col-md-2 control-label">终止日期</label>
+          <div class="col-md-2">
+            <input type="text" id="end_date" class="date_picker form-control">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <label for="data_status" class="col-md-2 control-label">数据状态</label>
+          <div class="col-md-2">
+            <select id="data_status" class="form-control">
+              <option>全部</option>
+              <option>正常</option>
+              <option>异常</option>
+            </select>
+          </div>
+          <label for="node_list" class="col-md-2 control-label">节点列表</label>
+          <div class="col-md-2">
+            <select id="node_list" class="form-control">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </select>
+          </div>
+          <button id="node_location" type="button" class="btn btn-primary">节点定位</button>
+          <span id="node_desc" class="label label-info">在大钟寺附近</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-10">
+            <button id="search" type="button" class="btn btn-primary">查询</button>
+            <label>&nbsp;&nbsp;</label>
+            <button id="download" type="button" class="btn btn-primary">下载</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
 {% endblock %}

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
 
     <title>{% block title %}{% endblock %}</title>
 
@@ -15,15 +14,16 @@
     <link href="/static/public/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
     
     <!-- kendo ui CSS -->
-    <link href="http://cdn.kendostatic.com/2013.2.716/styles/kendo.common.min.css" rel="stylesheet" type="text/css" />
-    <link href="http://cdn.kendostatic.com/2013.2.716/styles/kendo.silver.min.css" rel="stylesheet" type="text/css" />
-
+    <link href="/static/public/kendo/css/kendo.common.min.css" rel="stylesheet" type="text/css" />
+    <link href="/static/public/kendo/css/kendo.silver.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- jQuery UI CSS -->
+    <link href="/static/public/js/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/static/public/js/jquery-ui/jquery-ui.theme.min.css" rel="stylesheet" type="text/css" />
+    <link href="/static/public/js/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Custom styles for this template -->
     <link href="/static/public/css/main.css" rel="stylesheet">
-
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -56,16 +56,16 @@
       </div><!-- /.container -->
     </div><!-- /.navbar -->
 
-    <div class="container">
+    <div class="container-fluid">
 
         <div class="row">
-            <div class="col-xs-6 col-sm-2 sidebar-offcanvas" id="sidebar" role="navigation">
+            <div class="col-xs-2 col-sm-2 sidebar-offcanvas" id="sidebar" role="navigation">
                 <ul data-role="panelbar">
                     {% block menu %}{% endblock %}
                 </ul>
             </div>
         
-            <div id="main" class="col-xs-12 col-sm-10">
+            <div id="main" class="col-xs-10 col-sm-10">
             {% block main %}{% endblock %}
             </div><!--/span-->
 
@@ -87,8 +87,10 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/static/public/js/jquery-1.11.1.min.js"></script>
     <script src="/static/public/bootstrap/js/bootstrap.min.js"></script>
-    <script src="http://cdn.kendostatic.com/2013.2.716/js/kendo.all.min.js"></script>
+    <script src="/static/public/kendo/js/kendo.all.min.js"></script>
+    <script src="/static/public/js/jquery-ui/jquery-ui.min.js"></script>
     <script src="/static/public/js/main.js"></script>
+    
     {% block javascript %}{% endblock %}
   </body>
 </html>
