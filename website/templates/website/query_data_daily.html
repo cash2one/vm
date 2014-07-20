@@ -9,6 +9,7 @@
 
 {% block javascript %}
 <script src="/static/public/js/jquery-ui/datepicker-zh-TW.js"></script>
+<script src="/static/website/js/util.js"></script>
 <script src="/static/website/js/query_data_daily.js"></script>
 <script src="/static/public/DataTables/media/js/jquery.dataTables.min.js"></script>
 {% endblock %}
@@ -44,6 +45,24 @@
     <form class="form-horizontal" role="form">
       <div class="row">
         <div class="form-group">
+          <label for="monitor_type" class="col-md-2 control-label label-sm">终端类别</label>
+          <div class="col-md-2">
+            <select id="monitor_type" class="form-control input-sm">
+              <option value="c">采集器</option>
+              <option value="h">恒电位仪</option>
+            </select>
+          </div>
+          <label for="search_type" class="col-md-2 control-label label-sm">查询类型</label>
+          <div class="col-md-2">
+            <select id="search_type" class="form-control input-sm">
+              <option value="voltage">电压</option>
+              <option value="current">电流</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">
           <label for="start_date" class="col-md-2 control-label label-sm">起始日期</label>
           <div class="col-md-2">
             <input type="text" id="start_date" class="date_picker form-control input-sm">
@@ -59,17 +78,17 @@
           <label for="data_status" class="col-md-2 control-label label-sm">数据状态</label>
           <div class="col-md-2">
             <select id="data_status" class="form-control input-sm">
-              <option>全部</option>
-              <option>正常</option>
-              <option>异常</option>
+              <option value="all">全部</option>
+              <option value="normal">正常</option>
+              <option value="except">异常</option>
             </select>
           </div>
           <label for="node_list" class="col-md-2 control-label label-sm">节点列表</label>
           <div class="col-md-2">
             <select id="node_list" class="form-control input-sm">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
             </select>
           </div>
           <button id="node_location" type="button" class="btn btn-primary btn-sm">节点定位</button>
@@ -79,9 +98,9 @@
       <div class="row">
         <div class="form-group">
           <div class="col-md-offset-2 col-md-10">
-            <button id="search" type="button" class="btn btn-primary btn-sm">查询</button>
+            <button id="search_btn" type="button" class="btn btn-primary btn-sm">查询</button>
             <label>&nbsp;&nbsp;</label>
-            <button id="download" type="button" class="btn btn-primary btn-sm">下载</button>
+            <button id="download_btn" type="button" class="btn btn-primary btn-sm">下载</button>
           </div>
         </div>
       </div>
