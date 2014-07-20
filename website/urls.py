@@ -1,6 +1,7 @@
 #encoding=utf-8
 from django.conf.urls import patterns
 from django.views.generic import TemplateView
+from website.views import getDataHourly
 
 urlpatterns = patterns('',
     (r'^$', TemplateView.as_view(template_name="website/query_data_daily.html")), #首页, 分日页面
@@ -10,4 +11,8 @@ urlpatterns = patterns('',
     (r'^visual_data_hourly$', TemplateView.as_view(template_name="website/visual_data_hourly.html")), #分时曲线
     (r'^node_all$', TemplateView.as_view(template_name="website/node_all.html")), #节点全景
     (r'^node_manage$', TemplateView.as_view(template_name="website/node_manage.html")), #节点管理
+)
+
+urlpatterns += patterns('',
+    (r'^get_data_hourly$', getDataHourly), 
 )
