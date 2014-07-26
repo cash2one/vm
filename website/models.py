@@ -32,7 +32,7 @@ class Node(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     
     def __unicode__(self):
-        return self.name_id
+        return u"%s" % self.name_id
     
     class Meta:
         verbose_name = '节点'
@@ -46,7 +46,7 @@ class CMinuteData(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     
     def __unicode__(self):
-        return format_minute_data_identity(self, 'C')
+        return u"%s" % format_minute_data_identity(self, 'C')
 
 class HMinuteData(models.Model):
     node = models.ForeignKey('Node', verbose_name='节点')
@@ -57,7 +57,7 @@ class HMinuteData(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     
     def __unicode__(self):
-        return format_minute_data_identity(self, 'H')
+        return u"%s" % format_minute_data_identity(self, 'H')
 
 class CDailyData(models.Model):
     node = models.ForeignKey('Node', verbose_name='节点')
@@ -72,7 +72,7 @@ class CDailyData(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     
     def __unicode__(self):
-        return format_daily_data_identity(self, 'C')
+        return u"%s" % format_daily_data_identity(self, 'C')
         
 class HDailyData(models.Model):
     node = models.ForeignKey('Node', verbose_name='节点')
@@ -101,7 +101,7 @@ class HDailyData(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     
     def __unicode__(self):
-        return format_daily_data_identity(self, 'H')
+        return u"%s" % format_daily_data_identity(self, 'H')
 
 class AlertParam(models.Model):
     node = models.ForeignKey('Node', unique=True, verbose_name='节点')
@@ -115,7 +115,7 @@ class AlertParam(models.Model):
     email = models.CharField(max_length=40, verbose_name='通知邮箱')
     
     def __unicode__(self):
-        return str(node.name) + '+++' + str(user.name)
+        return u"%s" % str(node.name) + '+++' + str(user.name)
         
     class Meta:
         verbose_name = '报警关联'
