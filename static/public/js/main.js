@@ -14,6 +14,9 @@ function bindMenuHref() {
 	$('#node_all').bind('click', function(){
 		window.location = $(this).attr('href');
 	});
+	$('#admin').bind('click', function(){
+		window.location = $(this).attr('href');
+	});
 	$('#node_manage').bind('click', function(){
 		window.location = $(this).attr('href');
 	});
