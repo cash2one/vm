@@ -8,7 +8,7 @@ import time
 import datetime
 from django.template.loader import get_template
 from django.template import Context
-
+from website.utils import getNodeIdList, getNetNameList
 # Create your views here.
 @csrf_exempt
 def getDataHourly(request):
@@ -97,9 +97,11 @@ def node_all(request):
         return render_to_response('website/login.html')
     user_name = user.my_user.name
     #data = {'username': user_name};
-    net_list = Node.objects.values('net_name')
+    #net_list = Node.objects.values('net_name')
+    net_list = getNetNameList(user.my_user)
     print net_list
-    node_list = Node.objects.values('name_id')
+    #node_list = Node.objects.values('name_id')
+    node_list = getNodeIdList(user.my_user)
     print node_list
     node_id = None
     if 'node_id' in request.GET:
