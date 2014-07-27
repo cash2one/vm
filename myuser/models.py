@@ -34,9 +34,9 @@ class MyUser(models.Model):
     mail = models.CharField(max_length=40, blank=True, verbose_name=u'邮箱')
     position = models.CharField(max_length=40, blank=True, verbose_name=u'职务')
     company = models.ForeignKey(Company, blank=True, verbose_name=u'公司')
-    created_user = models.ForeignKey('self', related_name='+', blank=True, verbose_name=u'创建人')
+    created_user = models.ForeignKey('self', related_name='+', null=True, blank=True, verbose_name=u'创建人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
-    last_modified_user = models.ForeignKey('self', related_name='+', blank=True, verbose_name=u'修改人')
+    last_modified_user = models.ForeignKey('self', related_name='+', null=True, blank=True, verbose_name=u'修改人')
     last_modified_time = models.DateTimeField(auto_now=True, verbose_name=u'最后修改时间')
     
     def __unicode__(self):

@@ -19,7 +19,25 @@ function bindMenuHref() {
 	});
 }
 
+function logout_init() {
+	$('#logout').click(function() {
+		$.ajax({
+                url: '/logout/',
+                type: 'POST',
+                async: false,//Í¬²½
+                cache: false,
+                timeout: 2000,
+                //data: {'username':user_name, 'password':password},
+                //dataType: "json",
+                success: function(data){
+			window.location.href="/login_page";
+                }
+            });
+	});
+}
+
 $(document).ready(function () {
 	kendo.bind(document.body);
 	bindMenuHref();
+	logout_init();
 });
