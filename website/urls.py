@@ -24,3 +24,10 @@ urlpatterns += patterns('',
 	(r'^login/$', views_account.login_ajax),#登录函数
 	(r'^logout/$', views_account.logout_ajax),#注销函数
 )
+
+import views
+urlpatterns += patterns('',
+    (r'^node_all_location', views.node_all),
+    (r'^get_data_hourly$', views.getDataHourly),
+    (r'^get_node_desc$', views.getNodeDesc), 
+)
