@@ -18,7 +18,7 @@ class Node(models.Model):
     company = models.ForeignKey('myuser.Company', verbose_name='公司名称')
     name_id = models.IntegerField(unique=True, verbose_name='节点ID')
     alias = models.CharField(max_length=20, verbose_name='别名')
-    net_name = models.CharField(max_length=20, unique=True, verbose_name='节点网')
+    net_name = models.CharField(max_length=20, verbose_name='节点网')
     desc = models.CharField(max_length=40, verbose_name='描述')
     max_voltage = models.IntegerField(verbose_name='电压上限')
     min_voltage = models.IntegerField(verbose_name='电压下限')
