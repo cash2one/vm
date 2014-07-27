@@ -50,6 +50,7 @@ class CMinuteData(models.Model):
 
 class HMinuteData(models.Model):
     node = models.ForeignKey('Node', verbose_name='节点')
+    power_voltage = models.IntegerField(default=0, verbose_name='电源电压')
     potential = models.IntegerField(default=0, verbose_name='参比电位')
     voltage = models.IntegerField(default=0, verbose_name='输出电压')
     current = models.IntegerField(default=0, verbose_name='输出电流')
@@ -68,6 +69,13 @@ class CDailyData(models.Model):
     voltage_failure_times = models.IntegerField(default=0, verbose_name='电压失效次数')
     voltage_exception_times = models.IntegerField(default=0, verbose_name='电压异常次数')
     voltage_exception_period = models.IntegerField(default=0, verbose_name='电压异常时间')
+    max_current = models.IntegerField(default=0, verbose_name='最大电流')
+    min_current = models.IntegerField(default=0, verbose_name='最小电流')
+    avg_current = models.IntegerField(default=0, verbose_name='平均电流')
+    mse_current = models.IntegerField(default=0, verbose_name='电流均方差')
+    current_failure_times = models.IntegerField(default=0, verbose_name='电流失效次数')
+    current_exception_times = models.IntegerField(default=0, verbose_name='电流异常次数')
+    current_exception_period = models.IntegerField(default=0, verbose_name='电流异常时间')
     data_time = models.DateField(verbose_name='数据时间')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
     

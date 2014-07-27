@@ -1,4 +1,5 @@
 #encoding=utf-8
+
 from django.conf.urls import patterns
 from django.views.generic import TemplateView
 from website.views import getDataHourly
@@ -26,4 +27,9 @@ urlpatterns += patterns('',
     (r'^node_all_location$', views.node_all),
     (r'^get_data_hourly$', views.getDataHourly),
     (r'^get_node_desc$', views.getNodeDesc), 
+)
+
+import views_data_query
+urlpatterns += patterns('',
+    (r'^query_data_daily_search$', views_data_query.search_daily),
 )
