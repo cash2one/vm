@@ -43,6 +43,6 @@ class MyUser(models.Model):
         return self.name
     
     class Meta:
-        verbose_name = '用户'
-        verbose_name_plural = '用户'
+        verbose_name = '用户详细信息'
+        verbose_name_plural = '用户详细信息'
     
