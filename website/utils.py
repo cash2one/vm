@@ -9,5 +9,5 @@ def getNodeIdList(my_user):
 
 def getNetNameList(my_user):
     company = my_user.company
-    net_list = company.node_set.values('net_name')
+    net_list = company.node_set.values('net_name').distinct()
     return net_list

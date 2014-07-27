@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from website.models import Node
 import json
 import time
@@ -91,6 +92,7 @@ def getNodeDesc(request):
     return HttpResponse("五道口")
 
 @csrf_exempt
+@login_required
 def node_all(request):
     user = request.user
     if not user.is_authenticated():
@@ -132,3 +134,66 @@ def node_all(request):
         html = t.render(Context({'net_list': net_list, 'node_list': node_list, 'username':user_name}))
     print 'node_id', node_id
     return HttpResponse(html)
+
+@csrf_exempt
+def getNodeInfo(request):
+    #a = {'name':'kaka'}
+    node_name_id = int(request.POST['node_id'])
+    node = Node.objects.get(name_id=node_name_id)
+    #node = Node.objects.get(name_id=1)
+    company_name = node.company.name
+    net_name = node.net_name
+    alias = node.alias
+    desc = node.desc
+    max_voltage = node.max_voltage
+    min_voltage = node.min_voltage
+    max_current = node.max_current
+    min_current = node.min_current
+    latitude = node.latitude
+    longitude = node.longitude
+    sim_id = node.sim_id
+    expire_time = node.expire_time
+    expire_time = expire_time.strftime("%Y-%m-%d %H:%M:%S")
+    create_time = node.create_time
+    create_time = create_time.strftime("%Y-%m-%d %H:%M:%S")
+    print '!!!!!!!!!!!!!!!!!!!!!!!!', expire_time, create_time
+    info = {'company_name':company_name, 'net_name':net_name, 'node_id':node_name_id, 'alias':alias, 'desc':desc,
+            'max_voltage':max_voltage, 'min_voltage':min_voltage, 'max_current':max_current, 'min_current':min_current,
+            'latitude':latitude, 'longitude':longitude, 'sim_id':sim_id, 'expire_time':expire_time, 'create_time':create_time}
+    jsonData = json.dumps(info, ensure_ascii=False)
+    print jsonData
+    return HttpResponse(jsonData, content_type="application/json")
+
+@csrf_exempt
+def getNodesInfo(request):
+    net_name = request.POST['net_name']
+    node_list = Node.objects.filter(net_name=net_name)
+    dataVector = []
+    print 'node_list', node_list
+    for node in node_list:
+        company_name = node.company.name
+        net_name = node.net_name
+        alias = node.alias
+        desc = node.desc
+        max_voltage = node.max_voltage
+        min_voltage = node.min_voltage
+        max_current = node.max_current
+        min_current = node.min_current
+        latitude = node.latitude
+        print 'latitude:', latitude
+        longitude = node.longitude
+        print 'longitude:', longitude
+        sim_id = node.sim_id
+        expire_time = node.expire_time
+        expire_time = expire_time.strftime("%Y-%m-%d %H:%M:%S")
+        create_time = node.create_time
+        create_time = create_time.strftime("%Y-%m-%d %H:%M:%S")
+        node_name_id = node.name_id
+        info = {'company_name':company_name, 'net_name':net_name, 'node_id':node_name_id, 'alias':alias, 'desc':desc,
+            'max_voltage':max_voltage, 'min_voltage':min_voltage, 'max_current':max_current, 'min_current':min_current,
+            'latitude':latitude, 'longitude':longitude, 'sim_id':sim_id, 'expire_time':expire_time, 'create_time':create_time}
+        dataVector.append(info)
+    #dataVector = [{'name':'hello'}, {'name':'world'}]
+    jsonData = json.dumps(dataVector, ensure_ascii=False)
+    print 'jsonData', jsonData
+    return HttpResponse(jsonData, content_type="application/json")
