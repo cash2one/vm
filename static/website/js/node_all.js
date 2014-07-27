@@ -79,7 +79,10 @@ $('#search').click(function(){
                         //alert(data[1].name);
                         var map = new BMap.Map("dituContent");
                         var points = []
-                        for (var info in data) {
+                        //alert(data[0].company_name);
+                        //for (var i in data) {
+                        $.each(data,function(n,info) {  
+                            alert(info["company_name"]);
                             var sContent = "<table border='1'>" + 
                                 "<tr>" +
                                 "	<th colspan='4'>" + info.company_name + "</th>" + 
@@ -121,7 +124,7 @@ $('#search').click(function(){
                                 "	<td colspan='3'>" + info.create_time + "</td>" + 
                                 "</tr>" + 
                                 "</table>";
-                                var map = new BMap.Map("dituContent");
+                                alert(sContent);
                                 var infoWindow = new BMap.InfoWindow(sContent);
                                 var point = new BMap.Point(info.latitude, info.longitude);    // 创建点坐标
                                 var marker = new BMap.Marker(point);
@@ -133,8 +136,8 @@ $('#search').click(function(){
                                        infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
                                    }
                                 });
-                                points.push(point)
-                        }
+                                points.push(point);
+                        });
                         map.enableScrollWheelZoom();
                         map.setViewport(points);
                     }
