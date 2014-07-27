@@ -27,12 +27,83 @@
   <script src="/static/website/js/query_data_daily.js"></script>
   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=V2ZGGwEROEfR5YOiEoCKfMLF"></script>
   <script type="text/javascript">
-
+    
+var sContent =
+"<h4 style='margin:0 0 5px 0;padding:0.2em 0'>天安门</h4>" + 
+"<img style='float:right;margin:4px' id='imgDemo' src='http://app.baidu.com/map/images/tiananmen.jpg' width='139' height='104' title='天安门'/>" + 
+"<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2em'>天安门坐落在中国北京市中心,故宫的南侧,与天安门广场隔长安街相望,是清朝皇城的大门...</p>" + 
+"</div>";
+{% if info %}
+  var node_id = {{node_id}};
+    //alert('node_id : ' + node_id);
+    $("#node_list").val(node_id);
+    //$("#node_list").val(3);
+sContent = "<table border='1'>" + 
+"<tr>" +
+//"	<th colspan='4'>搜狐</th>" +
+"	<th colspan='4'>{{info.company_name}}</th>" + 
+"</tr>" + 
+"<tr>" + 
+"	<td>节点网</td>" + 
+"	<td colspan='3'>{{info.net_name}}</td>" + 
+"</tr>" + 
+"<tr>" + 
+"	<td>节点</td><td>{{info.node_id}}</td>" + 
+"	<td>别名</td><td>{{info.alias}}</td>" + 
+"</tr>" + 
+"<tr>" +
+"	<td>描述</td>" +
+"	<td colspan='3'>{{info.desc}}</td>" + 
+"</tr>" + 
+"<tr>" + 
+"	<td>电压上限</td><td>{{info.max_voltage}}</td>" + 
+"	<td>电压下限</td><td>{{info.min_voltage}}</td>" + 
+"</tr>" + 
+"<tr>" + 
+"	<td>电流上限</td><td>{{info.max_current}}</td>" + 
+"	<td>电流下限</td><td>{{info.min_current}}</td>" + 
+"</tr>" + 
+"<tr>" + 
+"	<td>纬度</td><td>{{info.latitude}}</td>" + 
+"	<td>经度</td><td>{{info.longitude}}</td>" + 
+"</tr>" + 
+"<tr>" +
+"	<td>SIM卡号</td>" + 
+"	<td colspan='3'>{{info.sim_id}}</td>" + 
+"</tr>" + 
+"<tr>" + 
+"	<td>有效期</td>" + 
+"	<td colspan='3'>{{info.expire_time | date:"Y-m-d H:i:s"}}</td>" + 
+"</tr>" + 
+"<tr>" + 
+"	<td>创建日期</td>" + 
+"	<td colspan='3'>{{info.create_time | date:"Y-m-d H:i:s"}}</td>" + 
+"</tr>" + 
+"</table>";
+{% endif %}
+var infoWindow = new BMap.InfoWindow(sContent); 
 // 百度地图API功能
 var map = new BMap.Map("dituContent");            // 创建Map实例
 var point = new BMap.Point(116.404, 39.915);    // 创建点坐标
-map.centerAndZoom(point,15);                     // 初始化地图,设置中心点坐标和地图级别。
-map.enableScrollWheelZoom();                            //启用滚轮放大缩小
+var point1 = new BMap.Point(115.404, 38.915);
+var points = [point, point1];
+var marker = new BMap.Marker(point);
+var marker1 = new BMap.Marker(point1);
+map.centerAndZoom(point,15);// 初始化地图,设置中心点坐标和地图级别。
+map.addOverlay(marker);
+map.addOverlay(marker1);
+map.enableScrollWheelZoom();                           //启用滚轮放大缩小
+//infoWindow.open(marker);
+//marker.openInfoWindow(infoWindow);
+map.setViewport(points);
+marker.addEventListener("click", function(){          
+   this.openInfoWindow(infoWindow);
+   //图片加载完毕重绘infowindow
+   document.getElementById('imgDemo').onload = function (){
+       infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+   }
+});
+
 
 </script>
 {% endblock %}
@@ -77,9 +148,9 @@ map.enableScrollWheelZoom();                            //启用滚轮放大缩�
             </div>
             <label for="node_list" class="col-md-2 control-label">节点范围</label>
             <div class="col-md-2">
-              <select id="node_list" class="form-control">
-                <option>节点</option>
-                <option>节点网</option>
+              <select id="node_range_list" class="form-control">
+                <option value="1">节点</option>
+                <option value="2">节点网</option>
               </select>
             </div>
           </div>
@@ -89,16 +160,27 @@ map.enableScrollWheelZoom();                            //启用滚轮放大缩�
             <label for="data_status" class="col-md-2 control-label">节点网列表</label>
             <div class="col-md-2">
               <select id="data_status" class="form-control">
-                <option>清华</option>
-                <option>北大</option>
+                <!--<option>清华</option>
+                <option>北大</option>-->
+                {%for net in net_list%}
+                    <option value={{net.net_name}}>{{net.net_name}}</option>
+                {%endfor%}
               </select>
             </div>
             <label for="node_list" class="col-md-2 control-label">节点列表</label>
             <div class="col-md-2">
               <select id="node_list" class="form-control">
-                <option>1</option>
+                <!--<option>1</option>
                 <option>2</option>
-                <option>3</option>
+                <option>3</option>-->
+                {%for node in node_list%}
+                    <!--{% ifequal node.name_id node_id %} 
+                      <option value={{node.name_id}} selected = "selected">{{node.name_id}}</option>
+                    {% else %}
+                      <option value={{node.name_id}}>{{node.name_id}}</option>
+                    {% endifequal %}-->
+                    <option value={{node.name_id}}>{{node.name_id}}</option>
+                {%endfor%}
               </select>
             </div>
             <button id="search" type="button" class="btn btn-primary">查询</button>
