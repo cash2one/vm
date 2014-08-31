@@ -20,6 +20,7 @@ urlpatterns += patterns('',
         (r'^login_page/$', TemplateView.as_view(template_name="website/login.html")),#登录页面
         (r'^login/$', views_account.login_ajax),#登录函数
         (r'^logout/$', views_account.logout_ajax),#注销函数
+        (r'^get_vcode/$', views_account.get_check_code_image),#验证码获取函数
 )
 
 import views

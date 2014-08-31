@@ -37,6 +37,9 @@
         <h2 class="form-signin-heading">VMonitor</h2>
         <input id="username" type="text" class="form-control" placeholder="用户名" required autofocus>
         <input id="password" type="password" class="form-control" placeholder="密码" required>
+        <div><input id="checkcode" type="text" class="form-control" placeholder="验证码" required>
+        <img onclick="this.setAttribute('src','/get_vcode?nocache='+Math.random());" src="/get_vcode" alt="CheckCode"/>
+        </div>
         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> 记住我

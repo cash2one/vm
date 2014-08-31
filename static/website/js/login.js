@@ -2,7 +2,8 @@ function login_init() {
     $('#login_btn').click(function(){
         var user_name = $('#username').val().trim();
         var password = $('#password').val().trim();
-        if (user_name == '' || password == '') {
+        var checkcode = $('#checkcode').val().trim();
+        if (user_name == '' || password == '' || checkcode == '') {
             return;
         } else {
             $.ajax({
@@ -11,7 +12,7 @@ function login_init() {
                 async: false,//同步
                 cache: false,
                 timeout: 2000,
-                data: {'username':user_name, 'password':password},
+                data: {'username':user_name, 'password':password, 'checkcode':checkcode},
                 dataType: "json",
                 success: function(data){
                     if (data.errno == 0){
@@ -26,6 +27,12 @@ function login_init() {
                             alert("用户名不存在");
                         } else if (data.errno == 2) {
                             alert("密码错误");
+                        } else if (data.errno == 5) {
+                            //code
+                            alert("验证码不能为空");
+                        } else if (data.errno == 6) {
+                            //code
+                            alert("验证码错误");
                         }
                     }
                 }

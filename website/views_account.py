@@ -13,7 +13,10 @@ from django.contrib.auth.decorators import login_required
 
 from myuser.models import *
 
-
+from hashlib import md5
+from datetime import *
+import ImageDraw, ImageFont, random, StringIO
+from PIL import Image
 '''
 public
 @desc 用户登录
@@ -23,6 +26,8 @@ public
         2 密码错误
         3 用户名或密码不能为空
         4 账户禁用
+        5 验证码不能为空
+        6 验证码错误
         -1 其他错误
 '''
 @csrf_exempt
@@ -31,6 +36,13 @@ def login_ajax(request):
 
     name = request.POST.get('username')
     pwd = request.POST.get('password')
+    code = request.POST.get('checkcode')
+    if (not code):
+        resp = {'errno' : 5, 'errinfo' : u'验证码不能为空'}
+        return HttpResponse(json.dumps(resp), mimetype = "application/json")
+    if request.session["checkcode"] != code:
+        resp = {'errno' : 6, 'errinfo' : u'验证码错误'}
+        return HttpResponse(json.dumps(resp), mimetype = "application/json")
     if (not name) or (not pwd):
         resp = {'errno' : 3, 'errinfo' : u'用户名或密码不能为空！'}
         return HttpResponse(json.dumps(resp), mimetype = "application/json")
@@ -66,3 +78,35 @@ def logout_ajax(request):
     if request.user.is_authenticated():
         auth.logout(request)
     return HttpResponse(json.dumps(resp),mimetype="application/json")
+
+
+'''
+生成验证码
+'''
+@csrf_exempt
+def get_check_code_image(request):
+    #图片宽度  
+    width = 160  
+    #图片高度  
+    height = 50  
+    #背景颜色  
+    bgcolor = (255,255,255)  
+    #生成背景图片  
+    im = Image.new('RGB',(width,height),bgcolor)
+    draw = ImageDraw.Draw(im)
+    mp = md5()
+    mp_src = mp.update(str(datetime.now()))
+    mp_src = mp.hexdigest()
+    rand_str = mp_src[0:4]
+    draw.text((10,10), rand_str[0], font=ImageFont.truetype("ARIAL.TTF", random.randrange(25,40)), fill=(0, 0, 255))
+    draw.text((48,10), rand_str[1], font=ImageFont.truetype("ARIAL.TTF", random.randrange(25,40)), fill=(0, 0, 255))
+    draw.text((85,10), rand_str[2], font=ImageFont.truetype("ARIAL.TTF", random.randrange(25,40)), fill=(0, 0, 255))
+    draw.text((120,10), rand_str[3], font=ImageFont.truetype("ARIAL.TTF", random.randrange(25,40)), fill=(0, 0, 255))
+    request.session['checkcode'] = rand_str
+    buf = StringIO.StringIO()
+    try:
+        im.save(buf, 'png')
+    except Exception,e:
+        print Exception,e
+    return HttpResponse(buf.getvalue(),'image/png')
+
