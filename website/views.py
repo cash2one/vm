@@ -23,13 +23,16 @@ def getDataHourly(request):
         print d
         d1 = d + datetime.timedelta(days=1)
         print d1
-        node = Node.objects.get(name_id=1)
-        
+        node = Node.objects.get(name_id=36)
+        print "node.id=", node.id
         #node_name_id = Node.objects.all()
         #cminutedata_list = CMinuteData.objects.filter(node=node.id).order_by(data_time)
         #cminutedata_list = CMinuteData.objects.filter(node=7).order_by(data_time)
         #cminutedata_list = node.cminutedata_set.all().order_by('data_time')
-        cminutedata_list = node.cminutedata_set.all().filter(data_time__gte=d, data_time__lt=d1)
+        cminutedata_list = node.cminutedata_set.all().filter(data_time__gte=d, data_time__lt=d1)[0:10]
+        #cminutedata_list = node.cminutedata_set.all()
+        
+        print len(cminutedata_list)
         data_vector = []
         for cminutedata in cminutedata_list:
             v = cminutedata.potential
@@ -39,8 +42,9 @@ def getDataHourly(request):
             #timeStamp = int(time.mktime(data_time.timetuple())) * 1000
             print timeStamp
             #timeStamp = 1406358888074
-            data_vector.append([timeStamp, v])
-            timeStamp += 1000
+            #data_vector.append([timeStamp,v])
+            data_vector.append({'x':timeStamp, 'y':v})
+            #timeStamp += 1000
         
         
         
@@ -85,15 +89,49 @@ def getDataHourly(request):
         
         
         jsonData = json.dumps(data_vector, ensure_ascii=False)
+        print jsonData
         return HttpResponse(jsonData, content_type="application/json")
     
+    
+@csrf_exempt
+def getDataDaily(request):
+    if request.is_ajax():
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
+        data_type = request.POST['data_type']
+        node_name_id = int(request.POST['node_id'])
+        
+        t_start = time.strptime(start_date, "%Y/%m/%d")
+        d_start = datetime.datetime(*t_start[:6])
+        t_end = time.strptime(end_date, "%Y/%m/%d")
+        d_end = datetime.datetime(*t_end[:6])
+        d_end = d_end + datetime.timedelta(days=1)
+        node = Node.objects.get(name_id=node_name_id)
+        print "node.id=", node.id
+        cdailydata_list = node.cdailydata_set.all().filter(data_time__gte=d_start, data_time__lte=d_end).values(data_type, "data_time")
+        print len(cdailydata_list)
+        
+        data_vector = []
+        for cdailydata in cdailydata_list:
+            v = cdailydata[data_type]
+            data_time = cdailydata["data_time"]
+            timeStamp = int(time.mktime(data_time.timetuple()) * 1000)
+            data_vector.append({'x':timeStamp, 'y':v})
+        jsonData = json.dumps(data_vector, ensure_ascii=False)
+        print jsonData
+        return HttpResponse(jsonData, content_type="application/json")
+
+
 @csrf_exempt
 def getNodeDesc(request):
-    return HttpResponse("五道口")
+    node_id = int(request.POST['node_id'])
+    node = Node.objects.get(name_id=node_id)
+    desc = node.desc
+    return HttpResponse(desc, content_type="application/text")
 
 @csrf_exempt
 @login_required
-def node_all(request):
+def node_all_location(request):
     user = request.user
     if not user.is_authenticated():
         return render_to_response('website/login.html')
@@ -196,4 +234,17 @@ def getNodesInfo(request):
     #dataVector = [{'name':'hello'}, {'name':'world'}]
     jsonData = json.dumps(dataVector, ensure_ascii=False)
     print 'jsonData', jsonData
+    return HttpResponse(jsonData, content_type="application/json")
+
+@csrf_exempt
+def getNodesIdList(request):
+    print "getNodesIdList"
+    user = request.user
+    node_list = getNodeIdList(user.my_user)
+    dataVector = []
+    for node in node_list:
+        dataVector.append({'value':node['name_id'], 'text':node['name_id']})
+    #dataVector = [{'value':22, 'text':22},{'value':33, 'text':33},{'value':44, 'text':44}]
+    jsonData = json.dumps(dataVector, ensure_ascii=False)
+    print jsonData
     return HttpResponse(jsonData, content_type="application/json")

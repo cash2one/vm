@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}分日数据查询{% endblock %}
+{% block title %}节点全景{% endblock %}
 
 {% block css %}
   <style type="text/css">
@@ -24,11 +24,10 @@
 
 {% block javascript %}
   <script src="/static/public/js/jquery-ui/datepicker-zh-TW.js"></script>
-  <script src="/static/website/js/query_data_daily.js"></script>
   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=V2ZGGwEROEfR5YOiEoCKfMLF"></script>
   <script type="text/javascript" src="/static/website/js/node_all.js"></script>
   <script type="text/javascript">
-    
+  
 var sContent =
 "<h4 style='margin:0 0 5px 0;padding:0.2em 0'>天安门</h4>" + 
 "<img style='float:right;margin:4px' id='imgDemo' src='http://app.baidu.com/map/images/tiananmen.jpg' width='139' height='104' title='天安门'/>" + 
@@ -82,7 +81,7 @@ sContent = "<table border='1'>" +
 "</tr>" + 
 "</table>";
 {% endif %}
-var infoWindow = new BMap.InfoWindow(sContent); 
+/*var infoWindow = new BMap.InfoWindow(sContent); 
 // 百度地图API功能
 var map = new BMap.Map("dituContent");            // 创建Map实例
 var point = new BMap.Point(116.404, 39.915);    // 创建点坐标
@@ -103,9 +102,7 @@ marker.addEventListener("click", function(){
    document.getElementById('imgDemo').onload = function (){
        infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
    }
-});
-
-
+});*/
 </script>
 {% endblock %}
 
@@ -148,8 +145,8 @@ marker.addEventListener("click", function(){
             <label for="data_status" class="col-md-2 control-label">视图方式</label>
             <div class="col-md-2">
               <select id="data_status" class="form-control">
-                <option>全景视图</option>
-                <option>列表视图</option>
+                <option value='1'>全景视图</option>
+                <option value='2'>列表视图</option>
               </select>
             </div>
             <label for="node_list" class="col-md-2 control-label">节点范围</label>
@@ -195,7 +192,7 @@ marker.addEventListener("click", function(){
       </form>
     </div>
   </div>
-  <div class="panel panel-primary">
+  <div class="panel panel-primary" id="content_div">
     <div class="panel-heading">全景视图</div>
     <div class="panel-body">
       <div id="dituContent" style="min-width:700px;height:400px;overflow: visible"></div>

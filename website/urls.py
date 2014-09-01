@@ -25,10 +25,13 @@ urlpatterns += patterns('',
 
 import views
 urlpatterns += patterns('',
-    (r'^node_all_location$', views.node_all),
+    (r'^node_all_location$', views.node_all_location),
     (r'^get_data_hourly$', views.getDataHourly),
+    (r'^get_data_daily$', views.getDataDaily),
     (r'^get_node_desc$', views.getNodeDesc),
+    (r'^get_node_info$', views.getNodeInfo),
     (r'^get_nodes_info$', views.getNodesInfo),
+    (r'^get_node_id_list$', views.getNodesIdList),
 )
 
 import views_data_query

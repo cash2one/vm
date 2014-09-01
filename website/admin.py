@@ -7,3 +7,4 @@ admin.site.register(AlertParam)
 
 
 admin.site.register(CMinuteData)
+admin.site.register(CDailyData)
