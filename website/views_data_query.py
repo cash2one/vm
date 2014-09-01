@@ -1,4 +1,3 @@
-
 #encoding=utf-8
 
 from django.shortcuts import render
@@ -18,30 +17,42 @@ from django.contrib.auth.decorators import login_required
 from myuser.models import *
 from website.models import *
 
+@csrf_exempt
 def search_daily(request):
-    resp = {'errno': -1,'errinfo': ''}
-    monitor_type = request.GET.get('monitor_type')
-    search_type = request.GET.get('search_type')
-    start_date = request.GET.get('start_date')
-    end_date = request.GET.get('end_date')
-    data_status = request.GET.get('data_status')
-    node_id = request.GET.get('node_id')
-    # step 0. 数据处理
-    start_date_vec = start_date.split('/')
-    start_year = int(start_date_vec[0])
-    start_month = int(start_date_vec[1])
-    start_day = int(start_date_vec[2])
-    end_date_vec = end_date.split('/')
-    end_year = int(end_date_vec[0])
-    end_month = int(end_date_vec[1])
-    end_day = int(end_date_vec[2])
+    # step 0. 数据接收
+    resp = {'error':1}
+    monitor_type = request.POST['monitor_type']
+    search_type = request.POST['search_type']
+    start_date = request.POST['start_date']
+    end_date = request.POST['end_date']
+    data_status = request.POST['data_status']
+    node_id = request.POST['node_list']
     # step 1. 采集器
     if monitor_type == 'c':
         # 1.1. 电压
         if search_type == 'voltage':
             # 1.1.1. 数据状态 -- 全部
             if data_status == 'all':
-                CDailyData.objects.filter(node__name_id=node_id, data_time__gte=datetime.date(start_year, start_month, start_day), date_time__lte=datetime.date(end_year, end_month, end_day)).values('max_voltage', 'min_voltage', 'avg_voltage', 'mse_voltage', 'voltage_failure_times', 'voltage_exception_times', 'voltage_exception_period', )
-    # step 2. 恒电位仪
-    elif monitor_type == 'h':
-        pass
+                infos = CDailyData.objects.filter(node__name_id=int(node_id), data_time__gte=start_date, data_time__lte=end_date).values_list('data_time','node__name_id','max_voltage', 'min_voltage', 'avg_voltage', 'mse_voltage', 'voltage_failure_times', 'voltage_exception_times', 'voltage_exception_period')
+                _compose_resp(infos, resp)
+            # 1.1.2. 数据状态 -- 正常
+            elif data_status == 'normal':
+                infos = CDailyData.objects.filter(node__name_id=int(node_id), data_time__gte=start_date, data_time__lte=end_date, voltage_failure_times=0, voltage_exception_times=0).values_list('data_time','node__name_id','max_voltage', 'min_voltage', 'avg_voltage', 'mse_voltage', 'voltage_failure_times', 'voltage_exception_times', 'voltage_exception_period')
+                _compose_resp(infos, resp)
+            # 1.1.3. 数据状态 -- 异常
+            elif data_status == 'except':
+                infos = CDailyData.objects.filter(node__name_id=int(node_id), data_time__gte=start_date, data_time__lte=end_date, voltage_failure_times__gt=0, voltage_exception_times__gt=0).values_list('data_time','node__name_id','max_voltage', 'min_voltage', 'avg_voltage', 'mse_voltage', 'voltage_failure_times', 'voltage_exception_times', 'voltage_exception_period')
+                _compose_resp(infos, resp)
+                
+    ## step 2. 恒电位仪
+    #elif monitor_type == 'h':
+    #    pass
+    return HttpResponse(json.dumps(resp),content_type="application/json")
+
+def _compose_resp(infos, resp):
+    resp['error'] = 0
+    resp['result'] = []
+    for info in infos:
+        info_list = list(info)
+        info_list[0] = str(info_list[0])
+        resp['result'].append(info_list)
