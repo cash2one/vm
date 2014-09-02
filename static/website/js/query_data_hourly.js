@@ -45,20 +45,39 @@ function query_init(my_table) {
     $('#search_btn').bind('click', function(){
         /* step 1. 检查输入 */
         var query_date = $('#query_date').val();
-        alert(query_date);
         if (! isValidDate(query_date)) {
             alert('日期输入有误, 请检查！');
             return;
         }
+        query_date = query_date.replace(/\//g, '-');
         /* step 2. 获得表单值 */
         var monitor_type = $('#monitor_type').val();
         var search_type = $('#search_type').val();
         var node = $('#node_list').val();
-        alert(query_date);
-        alert(monitor_type);
-        alert(search_type);
-        alert(data_status);
-        alert(node);
+        sent_data = {
+            'monitor_type': monitor_type,
+            'search_type': search_type,
+            'node_list': node,
+            'query_date': query_date
+        };
+        $.ajax({
+            url: '/query_data_hourly_search',
+            type: "POST",
+            async: false,
+            cache: false,
+            timeout: 2000,
+            data: sent_data,
+            dataType: "json",
+            success: function(res){
+                my_table.fnClearTable();
+                if (res.error == 1 || res.result.length == 0) {
+                    alert('这段时间没有数据!');
+                } else {
+                    console.log(res.result);
+                    my_table.fnAddData(res.result);
+                }
+            }
+        });
     });
 }
 

@@ -38,7 +38,6 @@ def query_data_daily(request):
 def query_data_hourly(request):
     user = request.user
     user_name = user.my_user.name
-    print user_name
     data = {'username': user_name};
     return render_to_response('website/query_data_hourly.html', data, context_instance=RequestContext(request))
     

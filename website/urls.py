@@ -37,4 +37,5 @@ urlpatterns += patterns('',
 import views_data_query
 urlpatterns += patterns('',
     (r'^query_data_daily_search$', views_data_query.search_daily),
+    (r'^query_data_hourly_search$', views_data_query.search_hourly),
 )

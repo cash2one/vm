@@ -41,6 +41,8 @@ class Node(models.Model):
 class CMinuteData(models.Model):
     node = models.ForeignKey('Node', verbose_name='节点')
     potential = models.IntegerField(default=0, verbose_name='电位')
+    voltage = models.IntegerField(default=0, verbose_name='输出电压')
+    current = models.IntegerField(default=0, verbose_name='输出电流')
     power_voltage = models.IntegerField(default=0, verbose_name='电源电压')
     data_time = models.DateTimeField(verbose_name='数据时间')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
@@ -62,6 +64,7 @@ class HMinuteData(models.Model):
 
 class CDailyData(models.Model):
     node = models.ForeignKey('Node', verbose_name='节点')
+    power_voltage = models.IntegerField(default=0, verbose_name='电源电压')
     max_voltage = models.IntegerField(default=0, verbose_name='最大电压')
     min_voltage = models.IntegerField(default=0, verbose_name='最小电压')
     avg_voltage = models.IntegerField(default=0, verbose_name='平均电压')
@@ -84,6 +87,7 @@ class CDailyData(models.Model):
         
 class HDailyData(models.Model):
     node = models.ForeignKey('Node', verbose_name='节点')
+    power_voltage = models.IntegerField(default=0, verbose_name='电源电压')
     max_voltage = models.IntegerField(default=0, verbose_name='最大电压')
     min_voltage = models.IntegerField(default=0, verbose_name='最小电压')
     avg_voltage = models.IntegerField(default=0, verbose_name='平均电压')
