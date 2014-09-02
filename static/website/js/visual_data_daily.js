@@ -13,21 +13,22 @@ options = {
 		zoomType: 'x'
 	},
         title: {
-		text: '分时数据曲线',
+		text: '分日数据曲线',
 		x: -20 //center
         },
-        subtitle: {
-		text: '电压',
-		x: -20
-        },
+//        subtitle: {
+//		text: '电压',
+//		x: -20
+//        },
         xAxis: {
 		type: 'datetime',
-		tickmarkPlacement: 'on',
+		//tickmarkPlacement: 'on',
 		tickPixelInterval: 100,
+		//tickPixelInterval: 300,
 		labels: {
-			step:1,
+			//step:1,
 			formatter: function(){
-				return Highcharts.dateFormat("%H:%M:%S", this.value);
+				return Highcharts.dateFormat("%m-%d", this.value);
 			}
 		},
 		gridLineWidth: 1
@@ -50,16 +51,16 @@ options = {
 		align: 'right',
 		verticalAlign: 'middle',
 		borderWidth: 0
-        },
-        series: [
-                    {
-                        name: '电压',
-                        data: []
-                    }
-                ]
+        }//,
+        //series: [
+        //            {
+        //                name: '数据类型',
+        //                data: []
+        //            }
+        //        ]
 };
 $(function () {
-	chart = new Highcharts.Chart(options);
+	//chart = new Highcharts.Chart(options);
         $.ajax({
 		url: "/get_node_id_list",
 		type: "post",
@@ -86,12 +87,22 @@ $(function () {
 $('#search').click(function(){
 	if(isValidDate($('#start_date').val()) && isValidDate($('#end_date').val()))
 	{
-                alert("getDataDaily");
+                //alert("getDataDaily");
 		getDataDaily();
 	} else {
 		alert("时间不能为空");
 	}
 });
+
+name_map = {
+	"max_voltage": "最大电压",
+	"min_voltage": "最小电压",
+	"avg_voltage": "平均电压",
+	"mse_voltage": "电压均方差",
+	"voltage_failure_times": "失效次数",
+	"voltage_exception_times": "异常次数",
+	"voltage_exception_period": "异常时间"
+}
 
 function getDataDaily() {
         var start_date = $('#start_date').val();
@@ -106,10 +117,30 @@ function getDataDaily() {
                         end_date: end_date,
                         data_type: data_type,
                         node_id: node_id
-                    },
+                },
 		dataType: "json",
 		success: function(data){
-			chart.series[0].setData(data);
+			//chart.series[0].name = "hhh";
+			//alert(chart.series[0].name);
+			//chart.series[0].setData(data);
+			var s = {
+				name: name_map[data_type],
+				data: data
+			};
+			var sub_title = {
+				text: name_map[data_type],
+				x: -20
+			};
+			//chart.series[0] = s;
+			//chart.redraw();
+			//options['subtitle'] = sub_title;
+			options.subtitle = sub_title;
+			var yAxis_title = {
+				text: name_map[data_type]
+			};
+			options.yAxis.title = yAxis_title;
+			chart = new Highcharts.Chart(options);
+			chart.addSeries(s);
 			
 		}
 	});
