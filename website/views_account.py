@@ -15,7 +15,12 @@ from myuser.models import *
 
 from hashlib import md5
 from datetime import *
-import ImageDraw, ImageFont, random, StringIO
+import ImageDraw, ImageFont, random
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import StringIO
+#import StringIO
 from PIL import Image
 '''
 public
