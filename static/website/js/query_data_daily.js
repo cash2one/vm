@@ -109,9 +109,37 @@ function query_init(mytable) {
     });
 }
 
+function node_list_init() {
+    $.ajax({
+        url: "/get_node_id_list",
+        type: "post",
+        data: {	k:'v' },
+        success:function(data){
+            for (var i = 0; i < data.length; i++) {
+                var item = new Option(data[i].value, data[i].text);
+                $('#node_list').append(item);
+            }
+            node_desc_change();
+        }
+    });
+    $('#node_list').change(node_desc_change);
+}
+
+function node_desc_change() {
+    $.ajax({
+        url:"/get_node_desc",
+        type: 'post',
+        data: {node_id: $('#node_list').val()},
+        success:function(data1){
+                $('#node_desc').text("在" + data1 + "附近");
+        }
+    });
+}
+
 $(function(){
     datepicker_init();
     var mytable = dataTable_init();
     select_init();
     query_init(mytable);
+    node_list_init();
 });

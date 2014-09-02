@@ -3,7 +3,7 @@ function datepicker_init() {
 }
 
 function dataTable_init() {
-    $('#mytable').dataTable({
+    var mytable = $('#mytable').dataTable({
         "language": {
             "lengthMenu": "每页显示 _MENU_ 条记录",
             "zeroRecords": "没有任何数据",
@@ -11,8 +11,16 @@ function dataTable_init() {
             "infoEmpty": "没有任何数据",
             "infoFiltered": "(filtered from _MAX_ total records)",
             "search": "搜索"
+        },
+        "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            var $nRow = $(nRow);
+            if (aData[8] > 0 || aData[9] > 0) {
+                $nRow.css({"color": "red"});
+            }
+            return nRow;
         }
     });
+    return mytable;
 }
 
 function select_init() {
@@ -33,7 +41,7 @@ function select_init() {
     });
 }
 
-function query_init() {
+function query_init(my_table) {
     $('#search_btn').bind('click', function(){
         /* step 1. 检查输入 */
         var query_date = $('#query_date').val();
@@ -54,10 +62,38 @@ function query_init() {
     });
 }
 
+function node_list_init() {
+    $.ajax({
+        url: "/get_node_id_list",
+        type: "post",
+        data: {	k:'v' },
+        success:function(data){
+            for (var i = 0; i < data.length; i++) {
+                var item = new Option(data[i].value, data[i].text);
+                $('#node_list').append(item);
+            }
+            node_desc_change();
+        }
+    });
+    $('#node_list').change(node_desc_change);
+}
+
+function node_desc_change() {
+    $.ajax({
+        url:"/get_node_desc",
+        type: 'post',
+        data: {node_id: $('#node_list').val()},
+        success:function(data1){
+                $('#node_desc').text("在" + data1 + "附近");
+        }
+    });
+}
+
 
 $(function(){
     datepicker_init();
-    dataTable_init();
+    var my_table = dataTable_init();
     select_init();
-    query_init();
+    query_init(my_table);
+    node_list_init();
 });
