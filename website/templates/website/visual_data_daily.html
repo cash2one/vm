@@ -51,11 +51,18 @@
       <form class="form-horizontal" role="form">
         <div class="row">
           <div class="form-group">
-            <label for="start_date" class="col-md-2 control-label label-sm">起始日期</label>
+	    <label for="monitor_type" class="col-md-1 control-label label-sm">终端类别</label>
+	    <div class="col-md-2">
+	      <select id="monitor_type" class="form-control input-sm">
+		<option value="c">采集器</option>
+		<option value="h">恒电位仪</option>
+	      </select>
+	    </div>
+            <label for="start_date" class="col-md-1 control-label label-sm">起始日期</label>
             <div class="col-md-2">
               <input type="text" id="start_date" class="date_picker form-control input-sm">
             </div>
-            <label for="end_date" class="col-md-2 control-label label-sm">终止日期</label>
+            <label for="end_date" class="col-md-1 control-label label-sm">终止日期</label>
             <div class="col-md-2">
               <input type="text" id="end_date" class="date_picker form-control input-sm">
             </div>
@@ -63,7 +70,7 @@
         </div>
         <div class="row">
           <div class="form-group">
-            <label for="data_status" class="col-md-2 control-label label-sm">曲线类型</label>
+            <label for="data_status" class="col-md-1 control-label label-sm">曲线类型</label>
             <div class="col-md-2">
               <select id="data_status" class="form-control input-sm">
                 <option value="max_voltage">最大电压</option>
@@ -76,22 +83,14 @@
                 <option value="">电池电压</option>
               </select>
             </div>
-            <label for="node_list" class="col-md-2 control-label label-sm">节点列表</label>
+            <label for="node_list" class="col-md-1 control-label label-sm">节点列表</label>
             <div class="col-md-2">
               <select id="node_list" class="form-control input-sm">
               </select>
             </div>
             <button id="node_location" type="button" class="btn btn-primary btn-sm">节点定位</button>
-            <span id="node_desc" class="label label-info">在大钟寺附近</span>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-              <button id="search" type="button" class="btn btn-primary btn-sm">查询</button>
-              <label>&nbsp;&nbsp;</label>
-              <button id="download" type="button" class="btn btn-primary btn-sm">下载</button>
-            </div>
+            <span id="node_desc" class="label label-info label-sm">在大钟寺附近</span>
+	    <button id="search" type="button" class="btn btn-primary btn-sm">查询</button>
           </div>
         </div>
       </form>
